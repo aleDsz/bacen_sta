@@ -54,4 +54,16 @@ defmodule Bacen.STA.Factory do
       operator: "Operator001"
     }
   end
+
+  def response_factory do
+    %Bacen.STA.Response{
+      result: build(:result)
+    }
+  end
+
+  def result_factory do
+    %Bacen.STA.Response.Result{
+      protocol: "053c29ae8b82"
+    }
+  end
 end
