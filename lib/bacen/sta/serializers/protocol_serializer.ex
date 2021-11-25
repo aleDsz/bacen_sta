@@ -28,22 +28,7 @@ defmodule Bacen.STA.ProtocolSerializer do
       iex>   }
       iex> }
       iex> Bacen.STA.ProtocolSerializer.serialize(protocol)
-      {:Parametros,
-        [
-          {:IdentificadorDocumento, ['ACCS001']},
-          {:Hash, ['053c29ae8b823df65f5bff084f410ca70530c30112bc7590518fe421f4421443']},
-          {:Tamanho, ['908']},
-          {:NomeArquivo, ['202111172051.xml']},
-          {:Observacao, ['test']},
-          {:Destinatarios,
-           [
-             Destinatario: [
-               Unidade: ['Unity001'],
-               Dependencia: ['Dependency001'],
-               Operador: ['Operator001']
-             ]
-           ]}
-        ]}
+      {:ok, ~s(<?xml version="1.0"?><Parametros><IdentificadorDocumento>ACCS001</IdentificadorDocumento><Hash>053c29ae8b823df65f5bff084f410ca70530c30112bc7590518fe421f4421443</Hash><Tamanho>908</Tamanho><NomeArquivo>202111172051.xml</NomeArquivo><Observacao>test</Observacao><Destinatarios><Destinatario><Unidade>Unity001</Unidade><Dependencia>Dependency001</Dependencia><Operador>Operator001</Operador></Destinatario></Destinatarios></Parametros>)}
 
       iex> protocol = %Bacen.STA.Protocol{
       iex>   parameters: %Bacen.STA.Protocol.Parameters{
@@ -64,22 +49,7 @@ defmodule Bacen.STA.ProtocolSerializer do
       iex>   }
       iex> }
       iex> Bacen.STA.ProtocolSerializer.serialize(protocol)
-      {:Parametros,
-        [
-          {:IdentificadorDocumento, ['ACCS001']},
-          {:Hash, ['053c29ae8b823df65f5bff084f410ca70530c30112bc7590518fe421f4421443']},
-          {:Tamanho, ['908']},
-          {:NomeArquivo, ['202111172051.xml']},
-          {:Observacao, []},
-          {:Destinatarios,
-           [
-             Destinatario: [
-               Unidade: ['Unity001'],
-               Dependencia: ['Dependency001'],
-               Operador: ['Operator001']
-             ]
-           ]}
-        ]}
+      {:ok, ~s(<?xml version="1.0"?><Parametros><IdentificadorDocumento>ACCS001</IdentificadorDocumento><Hash>053c29ae8b823df65f5bff084f410ca70530c30112bc7590518fe421f4421443</Hash><Tamanho>908</Tamanho><NomeArquivo>202111172051.xml</NomeArquivo><Observacao/><Destinatarios><Destinatario><Unidade>Unity001</Unidade><Dependencia>Dependency001</Dependencia><Operador>Operator001</Operador></Destinatario></Destinatarios></Parametros>)}
 
       iex> protocol = %Bacen.STA.Protocol{
       iex>   parameters: %Bacen.STA.Protocol.Parameters{
@@ -92,18 +62,34 @@ defmodule Bacen.STA.ProtocolSerializer do
       iex>   }
       iex> }
       iex> Bacen.STA.ProtocolSerializer.serialize(protocol)
-      {:Parametros,
-        [
-          {:IdentificadorDocumento, ['ACCS001']},
-          {:Hash, ['053c29ae8b823df65f5bff084f410ca70530c30112bc7590518fe421f4421443']},
-          {:Tamanho, ['908']},
-          {:NomeArquivo, ['202111172051.xml']},
-          {:Observacao, []},
-          {:Destinatarios, []}
-        ]}
+      {:ok, ~s(<?xml version="1.0"?><Parametros><IdentificadorDocumento>ACCS001</IdentificadorDocumento><Hash>053c29ae8b823df65f5bff084f410ca70530c30112bc7590518fe421f4421443</Hash><Tamanho>908</Tamanho><NomeArquivo>202111172051.xml</NomeArquivo><Observacao/><Destinatarios/></Parametros>)}
+
+      iex> protocol = %Bacen.STA.Protocol{parameters: %Bacen.STA.Protocol.Parameters{}}
+      iex> Bacen.STA.ProtocolSerializer.serialize(protocol)
+      {:error, :invalid_parameters}
+
+      iex> protocol = %Bacen.STA.Protocol{}
+      iex> Bacen.STA.ProtocolSerializer.serialize(protocol)
+      {:error, :invalid_protocol}
 
   """
   def serialize(%Protocol{parameters: parameters = %Protocol.Parameters{}}) do
+    string_xml =
+      parameters
+      |> build_element()
+      |> List.wrap()
+      |> :xmerl.export_simple(:xmerl_xml)
+      |> List.flatten()
+      |> to_string()
+
+    {:ok, string_xml}
+  rescue
+    _ -> {:error, :invalid_parameters}
+  end
+
+  def serialize(_), do: {:error, :invalid_protocol}
+
+  defp build_element(parameters = %Protocol.Parameters{}) do
     {:Parametros,
      [
        {:IdentificadorDocumento, [to_charlist(parameters.file_type)]},
@@ -140,6 +126,6 @@ defmodule Bacen.STA.ProtocolSerializer do
     end)
   end
 
-  defp senders(%Protocol.Parameters{senders: %Protocol.Parameters.Senders{sender: _}}),
+  defp senders(%Protocol.Parameters{senders: _}),
     do: []
 end
