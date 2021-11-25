@@ -21,7 +21,7 @@ defmodule Bacen.STA.MixProject do
     [
       plt_core_path: "priv/plts",
       plt_file: {:no_warn, "priv/plts/dialyzer.plt"},
-      plt_add_apps: [:ecto, :ex_machina, :timex],
+      plt_add_apps: [:ecto, :ex_machina, :timex, :quinn],
       ignore_warnings: ".dialyzerignore"
     ]
   end
@@ -60,6 +60,7 @@ defmodule Bacen.STA.MixProject do
       {:ex_machina, "~> 2.7", only: [:dev, :test], optional: true},
       {:credo, "~> 1.5", only: [:dev, :test]},
       {:excoveralls, "~> 0.14", only: :test},
+      {:quinn, "~> 1.1", optional: true},
       {:dialyxir, "~> 1.1", only: [:dev, :test], runtime: false},
       {:ex_doc, ">= 0.0.0", only: [:dev, :test], runtime: false}
     ]
