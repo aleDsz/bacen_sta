@@ -73,6 +73,7 @@ defmodule Bacen.STA.ProtocolSerializer do
       {:error, :invalid_protocol}
 
   """
+  @spec serialize(Protocol.t()) :: {:ok, String.t()} | {:error, any()}
   def serialize(%Protocol{parameters: parameters = %Protocol.Parameters{}}) do
     string_xml =
       parameters
