@@ -61,7 +61,7 @@ defmodule Bacen.STA.Protocol do
 
   @primary_key false
   embedded_schema do
-    embeds_one :parameters, Parameters, primary_key: false do
+    embeds_one :parameters, Parameters, primary_key: false, source: :Parametros do
       field :file_type, :string, source: :IdentificadorDocumento
       field :hash, :string, source: :Hash
       field :file_size, :integer, source: :Tamanho
