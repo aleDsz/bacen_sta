@@ -1,2 +1,2 @@
-Application.ensure_all_started(:timex)
+{:ok, _} = Application.ensure_all_started(:timex)
 ExUnit.start()
