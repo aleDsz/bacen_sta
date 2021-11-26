@@ -6,7 +6,7 @@ config :logger, level: :error
 
 config :bacen_sta,
   client: Bacen.STA.ClientMock,
-  test: true,
+  test_mode: true,
   credentials: [
     username: "test",
     password: "foo"

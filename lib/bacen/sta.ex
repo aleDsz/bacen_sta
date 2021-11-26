@@ -16,6 +16,11 @@ defmodule Bacen.STA do
 
   ## Examples
 
+      iex> Application.put_env(:bacen_sta, :test_mode, true)
+      iex> Bacen.STA.test?()
+      true
+
+      iex> Application.put_env(:bacen_sta, :test_mode, false)
       iex> Bacen.STA.test?()
       false
 
