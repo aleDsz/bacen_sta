@@ -7,6 +7,7 @@
     assert_valid_changeset: 1,
     refute_valid_changeset: 1,
     plug: 1,
-    adapter: 1
+    adapter: 1,
+    defmock: 2
   ]
 ]

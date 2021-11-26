@@ -62,6 +62,7 @@ defmodule Bacen.STA.MixProject do
       {:excoveralls, "~> 0.14", only: :test},
       {:quinn, "~> 1.1", optional: true},
       {:tesla, "~> 1.4", optional: true},
+      {:mox, "~> 1.0", only: [:dev, :test]},
       {:dialyxir, "~> 1.1", only: [:dev, :test], runtime: false},
       {:ex_doc, ">= 0.0.0", only: [:dev, :test], runtime: false}
     ]
