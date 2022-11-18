@@ -54,7 +54,7 @@ defmodule Bacen.STA.MixProject do
 
   defp deps do
     [
-      {:ecto, "~> 3.7.1", optional: true},
+      {:ecto, "~> 3.9.2", optional: true},
       {:telemetry, "~> 0.4", optional: true},
       {:timex, "~> 3.7", optional: true},
       {:ex_machina, "~> 2.7", only: [:dev, :test], optional: true},
